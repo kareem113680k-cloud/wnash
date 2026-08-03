@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wnash Time - قطاع سحب وصيانة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
+</script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQ6uM8jxDDeDw1xtVwK-yjYsX7Uc58aBk",
+    authDomain: "kareem-1a3e6.firebaseapp.com",
+    projectId: "kareem-1a3e6",
+    storageBucket: "kareem-1a3e6.firebasestorage.app",
+    messagingSenderId: "818637746964",
+    appId: "1:818637746964:web:7e51214a52f6fcc0ac4801",
+    measurementId: "G-6DCGDC0P73"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+<style>
+  :root {
+    --bg-dark: #0a0a0a;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --accent: #00ff88;
+    --danger: #ff4444;
+    --warn: #ffaa00;
+    --text-dim: #88ffaa;
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg-dark);
+    color: #fff;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .navbar {
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(16px);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--accent);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 800;
+    font-size: 22px;
+  }
+
+  .logo-text h1 {
+    font-size: 20px;
+    margin: 0;
+    color: var(--accent);
+  }
+
+  .logo-text p {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--accent);
+    color: #000;
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.active {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .btn-danger-nav {
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-danger-nav:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+  }
+
+  .btn-admin {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 12px;
+    display: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-admin:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+  }
+
+  .badge {
+    background: var(--danger);
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 10px;
+    display: none;
+  }
+
+  .banner {
+    background: linear-gradient(135deg, #00ff88 0%, #00cc77 50%, #009966 100%);
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%,
+    100% {
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 80px rgba(0, 255, 136, 0.6);
+    }
+  }
+
+  .banner h1 {
+    font-size: 52px;
+    color: #000;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+  }
+
+  .banner p {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 25px;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 255, 136, 0.15);
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .input-field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+  }
+
+  .input-field::placeholder {
+    color: #666;
+  }
+
+  textarea.input-field {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+
+  .btn-success {
+    padding: 8px 18px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+
+  .btn-danger {
+    padding: 8px 18px;
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+
+  .btn-warn {
+    padding: 8px 18px;
+    background: var(--warn);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-warn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+  }
+
+  .btn-outline {
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline:hover {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .stat-card .number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-card .label {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .page {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .page.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .auth-box {
+    max-width: 420px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .auth-box .auth-logo {
+    width: 80px;
+    height: 80px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 800;
+    font-size: 36px;
+    margin: 0 auto 20px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  @media (max-width: 600px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .admin-item {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 22px;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+  }
+
+  .admin-item:hover {
+    transform: translateY(-2px);
+  }
+
+  .admin-item.pending {
+    border-color: var(--warn);
+  }
+
+  .admin-item.accepted {
+    border-color: var(--accent);
+  }
+
+  .admin-item.rejected {
+    border-color: var(--danger);
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+
+  .blocked-box {
+    background: #1a0d0d;
+    padding: 40px;
+    border-radius: 14px;
+    border: 1px solid var(--danger);
+    text-align: center;
+  }
+
+  .blocked-box .icon {
+    font-size: 56px;
+    margin-bottom: 15px;
+  }
+
+  .blocked-box h3 {
+    color: var(--danger);
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .blocked-timer {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--warn);
+    font-family: 'Courier New', monospace;
+    margin-top: 10px;
+    letter-spacing: 3px;
+  }
+
+  .timer-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+  }
+
+  .timer-display {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+  }
+
+  .notif-item {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 18px;
+    border-radius: 12px;
+    border-right: 4px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .notif-item.rejected {
+    border-right-color: var(--danger);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-dim);
+  }
+
+  .empty-state .icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
+
+  .rank-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #003311;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-dim);
+    font-size: 12px;
+    border-top: 1px solid var(--glass-border);
+    margin-top: 40px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 15px;
+    }
+    .nav-links {
+      width: 100%;
+      justify-content: center;
+    }
+    .container {
+      padding: 15px;
+    }
+    .banner h1 {
+      font-size: 32px;
+    }
+    .banner {
+      padding: 40px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar" style="display:none;">
+    <div class="logo-area">
+      <div class="logo-icon">W</div>
+      <div class="logo-text">
+        <h1>Wnash Time</h1>
+        <p id="sector-name-display">قطاع شركة سحب و الصيانة</p>
+      </div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="goTo('home')" id="nav-home">🏠 الرئيسية</button>
+      <button class="nav-btn" onclick="goTo('apply')" id="nav-apply">📝 تقديم</button>
+      <button class="nav-btn" onclick="goTo('profile')" id="nav-profile">👤 البروفايل</button>
+      <button class="nav-btn" onclick="goTo('notifications')" id="nav-notif">🔔 <span class="badge" id="notif-badge">0</span></button>
+      <button class="nav-btn" onclick="goTo('server')" id="nav-server">🌐 السيرفر</button>
+      <button class="btn-admin" onclick="goTo('admin')" id="nav-admin">🛡️ الإدارة</button>
+      <button class="btn-danger-nav" onclick="logout()">🚪 خروج</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- AUTH -->
+    <div class="page active" id="page-auth">
+      <div class="auth-box">
+        <div class="auth-logo">W</div>
+        <h2 style="color:var(--accent);margin-bottom:5px;">تسجيل الدخول</h2>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:25px;">بوابة الترشيحات</p>
+        <input class="input-field" id="auth-user" placeholder="اسم المستخدم" style="margin-bottom:12px;">
+        <input class="input-field" id="auth-pass" type="password" placeholder="كلمة المرور" style="margin-bottom:20px;">
+        <button class="btn-primary" onclick="login()" style="margin-bottom:10px;">🔐 دخول</button>
+        <button class="btn-outline" onclick="showRegister()" style="width:100%;">📝 إنشاء حساب جديد</button>
+        <p id="auth-msg" style="text-align:center;margin-top:15px;color:var(--danger);font-size:14px;min-height:20px;"></p>
+      </div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="page" id="page-register">
+      <div class="auth-box">
+        <h2 style="color:var(--accent);margin-bottom:5px;">👤 إنشاء حساب</h2>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:25px;">املأ البيانات التالية</p>
+        <input class="input-field" id="reg-username" placeholder="اسم المستخدم" style="margin-bottom:12px;">
+        <input class="input-field" id="reg-password" type="password" placeholder="كلمة المرور" style="margin-bottom:12px;">
+        <input class="input-field" id="reg-password-confirm" type="password" placeholder="تأكيد كلمة المرور" style="margin-bottom:20px;">
+        <button class="btn-primary" onclick="register()" style="margin-bottom:10px;">📝 إنشاء حساب</button>
+        <button class="btn-outline" onclick="showLogin()" style="width:100%;">🔐 لديك حساب؟ سجل دخول</button>
+        <p id="reg-msg" style="text-align:center;margin-top:15px;color:var(--danger);font-size:14px;min-height:20px;"></p>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="page" id="page-home">
+      <div class="banner">
+        <h1>🚀 Wnash Time</h1>
+        <p id="banner-subtitle">قطاع شركة سحب و الصيانة - بوابة الترشيحات الرسمية</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="number" id="stat-users">0</div><div class="label">👥 الأعضاء</div></div>
+        <div class="stat-card"><div class="number" id="stat-apps">0</div><div class="label">📝 الطلبات</div></div>
+        <div class="stat-card"><div class="number" id="stat-accepted">0</div><div class="label">✅ المقبولين</div></div>
+        <div class="stat-card"><div class="number" id="stat-rejected">0</div><div class="label">❌ المرفوضين</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+        <div>
+          <button class="btn-primary" onclick="goTo('apply')" style="margin-bottom:20px;">📝 تقديم الآن</button>
+          <div class="card">
+            <h3 style="color:var(--accent);margin-bottom:15px;">📢 آخر الإعلانات</h3>
+            <div id="home-announcements"><p style="color:var(--text-dim);">جاري التحميل...</p></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--accent);margin-bottom:15px;">📋 الرتب المتاحة</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="rank-badge">PG</span><span class="rank-badge">MG</span>
+            <span class="rank-badge">PD</span><span class="rank-badge">SK</span>
+            <span class="rank-badge">TK</span><span class="rank-badge">RK</span>
+            <span class="rank-badge">DOS</span><span class="rank-badge">KOS</span>
+            <span class="rank-badge">/fl</span><span class="rank-badge">/gov</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLY -->
+    <div class="page" id="page-apply">
+      <h2 style="margin-bottom:5px;">📝 نموذج الترشيح</h2>
+      <p style="color:var(--text-dim);margin-bottom:20px;font-size:14px;">املأ جميع الحقول. يمكنك التقديم مرة كل 24 ساعة.</p>
+      <div class="blocked-box" id="apply-blocked" style="display:none;">
+        <div class="icon">⏳</div>
+        <h3>لقد قدمت طلباً اليوم</h3>
+        <p style="color:#ccc;">يمكنك التقديم مرة أخرى بعد:</p>
+        <div class="blocked-timer" id="apply-timer">00:00:00</div>
+      </div>
+      <div class="card" id="apply-form">
+        <div class="grid-2">
+          <div><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">👤 الاسم</label><input class="input-field" id="q-name" placeholder="أدخل اسمك الكامل"></div>
+          <div><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🎂 العمر</label><input class="input-field" id="q-age" type="number" placeholder="مثال: 20"></div>
+        </div>
+        <div style="margin-top:14px;"><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🆔 الـ ID</label><input class="input-field" id="q-id" placeholder="أدخل معرفك في السيرفر"></div>
+        <div style="margin-top:14px;"><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">💼 الخبرة</label><textarea class="input-field" id="q-exp" placeholder="اشرح خبراتك السابقة..."></textarea></div>
+        <div style="margin-top:14px;"><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">❓ لماذا تريد الانضمام؟</label><textarea class="input-field" id="q-why" placeholder="اشرح سبب رغبتك..."></textarea></div>
+        <div style="margin-top:14px;"><label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🚀 ماذا ستقدم للقطاع؟</label><textarea class="input-field" id="q-benefit" placeholder="كيف ستساهم في التطوير..."></textarea></div>
+
+        <div style="margin-top:14px;">
+          <label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">📜 القوانين</label>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى PG؟</p>
+            <textarea class="input-field" id="q-pg" placeholder="اكتب معنى PG..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى MG؟</p>
+            <textarea class="input-field" id="q-mg" placeholder="اكتب معنى MG..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى PD؟</p>
+            <textarea class="input-field" id="q-pd" placeholder="اكتب معنى PD..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى SK؟</p>
+            <textarea class="input-field" id="q-sk" placeholder="اكتب معنى SK..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى TK؟</p>
+            <textarea class="input-field" id="q-tk" placeholder="اكتب معنى TK..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى RK؟</p>
+            <textarea class="input-field" id="q-rk" placeholder="اكتب معنى RK..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى DOS؟</p>
+            <textarea class="input-field" id="q-dos" placeholder="اكتب معنى DOS..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">ما معنى KOS؟</p>
+            <textarea class="input-field" id="q-kos" placeholder="اكتب معنى KOS..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">وظيفة /fl</p>
+            <textarea class="input-field" id="q-fl" placeholder="اشرح وظيفة /fl..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;margin-bottom:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">وظيفة /gov</p>
+            <textarea class="input-field" id="q-gov" placeholder="اشرح وظيفة /gov..." style="min-height:50px;"></textarea>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;">
+            <p style="color:var(--accent);font-weight:700;margin-bottom:8px;">كيف تتصرف إذا خالف عضو القوانين؟</p>
+            <textarea class="input-field" id="q-scenario" placeholder="اكتب تصرفك..." style="min-height:50px;"></textarea>
+          </div>
+        </div>
+
+        <div class="timer-box" style="margin-top:18px;">
+          <span style="color:var(--text-dim);font-size:14px;">⏱️ وقت الكتابة</span>
+          <span class="timer-display" id="open-timer">00:00:00</span>
+        </div>
+        <button class="btn-primary" style="margin-top:18px;" onclick="submitApply()">📤 إرسال الطلب</button>
+        <p id="apply-msg" style="text-align:center;margin-top:12px;min-height:20px;font-size:14px;"></p>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="page-profile">
+      <div class="card" style="max-width:500px;margin:0 auto;text-align:center;">
+        <img src="" alt="صورة شخصية" id="profile-avatar" class="profile-avatar">
+        <h2 id="profile-name" style="color:var(--accent);">اسم المستخدم</h2>
+        <p style="color:var(--text-dim);">🎮 <span id="profile-ingame">-</span></p>
+        <p style="color:var(--text-dim);">💬 <span id="profile-discord">-</span></p>
+        <p style="color:var(--text-dim);">🆔 <span id="profile-id">-</span></p>
+        <p style="color:var(--text-dim);">📅 تاريخ الإنشاء: <span id="profile-created">-</span></p>
+        <p style="color:var(--text-dim);">📝 حالة الطلب: <span id="profile-status" style="color:var(--warn);">لا يوجد طلب</span></p>
+        <p style="color:var(--text-dim);">📊 عدد الطلبات: <span id="profile-apps-count">0</span></p>
+        <button class="btn-primary" onclick="editProfile()" style="margin-top:15px;">✏️ تعديل البيانات</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="page" id="page-notifications">
+      <h2 style="margin-bottom:20px;">🔔 الإشعارات</h2>
+      <div id="notif-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+
+    <!-- SERVER -->
+    <div class="page" id="page-server">
+      <h2 style="margin-bottom:20px;">🌐 معلومات السيرفر</h2>
+      <div style="display:flex;flex-direction:column;gap:20px;max-width:600px;margin:0 auto;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:50px;margin-bottom:15px;">🌐</div>
+          <h3 style="color:var(--accent);margin-bottom:8px;">Wnash Time</h3>
+          <p style="color:var(--text-dim);margin-bottom:20px;">موقع السيرفر الرسمي</p>
+          <a href="https://wnashtime.net/" target="_blank" class="btn-primary" style="display:inline-block;width:auto;padding:12px 45px;text-decoration:none;">زيارة الموقع</a>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:50px;margin-bottom:15px;">💬</div>
+          <h3 style="color:#5865F2;margin-bottom:8px;">Discord</h3>
+          <p style="color:var(--text-dim);margin-bottom:20px;">انضم لمجتمعنا على الديسكورد</p>
+          <a href="https://discord.gg/wnashtime" target="_blank" id="discord-link-btn" style="display:inline-block;padding:12px 45px;background:#5865F2;color:#fff;text-decoration:none;border-radius:10px;font-weight:700;font-size:15px;">انضم للديسكورد</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="page" id="page-admin">
+      <h2 style="margin-bottom:20px;">🛡️ لوحة الإدارة</h2>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="number" id="admin-users">0</div><div class="label">👥 المستخدمين</div></div>
+        <div class="stat-card"><div class="number" id="admin-apps">0</div><div class="label">📝 الطلبات</div></div>
+        <div class="stat-card"><div class="number" id="admin-accepted">0</div><div class="label">✅ المقبولين</div></div>
+        <div class="stat-card"><div class="number" id="admin-rejected">0</div><div class="label">❌ المرفوضين</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <button class="btn-success" onclick="adminTab('apps')">📝 الطلبات</button>
+        <button class="btn-outline" onclick="adminTab('users')">👥 المستخدمون</button>
+        <button class="btn-outline" onclick="adminTab('announcements')">📢 الإعلانات</button>
+        <button class="btn-outline" onclick="adminTab('settings')">⚙️ الإعدادات</button>
+      </div>
+
+      <div id="admin-apps-section">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;">
+          <button class="btn-success" onclick="filterAdmin('all')">الكل</button>
+          <button class="btn-warn" onclick="filterAdmin('pending')">⏳ قيد المراجعة</button>
+          <button class="btn-outline" onclick="filterAdmin('accepted')">✅ مقبول</button>
+          <button class="btn-danger" onclick="filterAdmin('rejected')">❌ مرفوض</button>
+        </div>
+        <div id="admin-list" style="display:flex;flex-direction:column;gap:15px;"></div>
+      </div>
+
+      <div id="admin-users-section" style="display:none;">
+        <div style="margin-bottom:15px;">
+          <input class="input-field" id="admin-search" placeholder="🔍 البحث بالاسم أو ID" style="max-width:400px;" oninput="searchUsers()">
+        </div>
+        <div id="admin-users-list" style="display:flex;flex-direction:column;gap:15px;"></div>
+      </div>
+
+      <div id="admin-announcements-section" style="display:none;">
+        <div class="card">
+          <h3 style="color:var(--accent);margin-bottom:15px;">📢 إرسال إعلان</h3>
+          <input class="input-field" id="announcement-title" placeholder="عنوان الإعلان" style="margin-bottom:12px;">
+          <textarea class="input-field" id="announcement-content" placeholder="محتوى الإعلان..." style="min-height:100px;margin-bottom:12px;"></textarea>
+          <button class="btn-primary" onclick="sendAnnouncement()">📤 إرسال الإعلان</button>
+          <p id="announcement-msg" style="text-align:center;margin-top:10px;min-height:20px;font-size:14px;"></p>
+        </div>
+        <div id="announcements-list" style="margin-top:20px;display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+
+      <div id="admin-settings-section" style="display:none;">
+        <div class="card">
+          <h3 style="color:var(--accent);margin-bottom:15px;">⚙️ الإعدادات</h3>
+          <div style="margin-bottom:15px;">
+            <label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">📝 فتح/إغلاق التقديم</label>
+            <button class="btn-warn" onclick="toggleApplications()" id="toggle-apps-btn">🔒 إغلاق التقديم</button>
+          </div>
+          <div style="margin-bottom:15px;">
+            <label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🏷️ تغيير اسم القطاع</label>
+            <div style="display:flex;gap:10px;">
+              <input class="input-field" id="sector-name" placeholder="اسم القطاع الجديد" style="flex:1;">
+              <button class="btn-success" onclick="changeSectorName()">تغيير</button>
+            </div>
+          </div>
+          <div style="margin-bottom:15px;">
+            <label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🎨 تغيير اللون الأساسي</label>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="color" id="accent-color" value="#00ff88" style="width:50px;height:50px;border-radius:10px;border:none;cursor:pointer;background:transparent;">
+              <button class="btn-success" onclick="changeAccentColor()">تغيير</button>
+            </div>
+          </div>
+          <div>
+            <label class="form-label" style="display:block;margin-bottom:6px;font-size:14px;font-weight:500;">🔗 تغيير رابط الديسكورد</label>
+            <div style="display:flex;gap:10px;">
+              <input class="input-field" id="discord-link" placeholder="رابط الديسكورد الجديد" style="flex:1;">
+              <button class="btn-success" onclick="changeDiscordLink()">تغيير</button>
+            </div>
+          </div>
+          <p id="settings-msg" style="text-align:center;margin-top:15px;min-height:20px;font-size:14px;"></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer" id="footer" style="display:none;">
+    🎮 Wnash Time - قطاع شركة سحب و الصيانة | جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    // =============================================================
+    //  📦 DATA
+    // =============================================================
+    let users = [];
+    let applications = [];
+    let notifications = [];
+    let announcements = [];
+    let settings = {
+      applicationsOpen: true,
+      sectorName: 'قطاع شركة سحب و الصيانة',
+      accentColor: '#00ff88',
+      discordLink: 'https://discord.gg/wnashtime'
+    };
+    let currentUser = JSON.parse(localStorage.getItem('wn_current_v2') || 'null');
+    let adminFilter = 'all';
+    let timerInterval = null;
+
+    // =============================================================
+    //  🔥 FIREBASE - تحميل البيانات
+    // =============================================================
+    function loadFirebaseData() {
+      db.ref('users').on('value', (snapshot) => {
+        const data = snapshot.val();
+        users = data ? Object.values(data) : [];
+        if (currentUser) {
+          updateHomeStats();
+          if (document.getElementById('page-admin').classList.contains('active')) {
+            renderAdmin();
+          }
+          if (document.getElementById('admin-users-section').style.display !== 'none') {
+            renderAdminUsers();
+          }
+        }
+      });
+
+      db.ref('applications').on('value', (snapshot) => {
+        const data = snapshot.val();
+        applications = data ? Object.values(data) : [];
+        if (currentUser) {
+          updateHomeStats();
+          if (document.getElementById('page-admin').classList.contains('active')) {
+            renderAdminApps();
+          }
+          renderNotifications();
+          renderProfile();
+        }
+      });
+
+      db.ref('notifications').on('value', (snapshot) => {
+        const data = snapshot.val();
+        notifications = data ? Object.values(data) : [];
+        if (currentUser) {
+          renderNotifications();
+          updateNotifBadge();
+        }
+      });
+
+      db.ref('announcements').on('value', (snapshot) => {
+        const data = snapshot.val();
+        announcements = data ? Object.values(data) : [];
+        if (currentUser) {
+          loadAnnouncements();
+          if (document.getElementById('admin-announcements-section').style.display !== 'none') {
+            renderAnnouncementsList();
+          }
+        }
+      });
+
+      db.ref('settings').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          settings = data;
+          document.documentElement.style.setProperty('--accent', settings.accentColor);
+          document.documentElement.style.setProperty('--text', settings.accentColor);
+          document.getElementById('sector-name-display').textContent = settings.sectorName;
+          document.getElementById('banner-subtitle').textContent = settings.sectorName + ' - بوابة الترشيحات الرسمية';
+          if (document.getElementById('discord-link-btn')) {
+            document.getElementById('discord-link-btn').href = settings.discordLink;
+          }
+        }
+      });
+
+      // إنشاء حساب الأدمن msm / 123123123
+      db.ref('users/msm').once('value').then((snapshot) => {
+        if (!snapshot.exists()) {
+          db.ref('users/msm').set({
+            username: 'msm',
+            password: '123123123',
+            ingame: 'MSM',
+            discord: 'msm#0001',
+            id: '0001',
+            avatar: '',
+            role: 'admin',
+            rank: 'Admin',
+            created: Date.now(),
+            banned: false
+          });
+        }
+      });
+    }
+
+    // =============================================================
+    //  🧭 NAVIGATION
+    // =============================================================
+    function goTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      const navBtn = document.getElementById('nav-' + page);
+      if (navBtn) navBtn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (page === 'home') updateHomeStats();
+      if (page === 'apply') initApply();
+      if (page === 'notifications') renderNotifications();
+      if (page === 'profile') renderProfile();
+      if (page === 'admin') renderAdmin();
+    }
+
+    function initApp() {
+      document.getElementById('navbar').style.display = 'flex';
+      document.getElementById('footer').style.display = 'block';
+      document.getElementById('page-auth').classList.remove('active');
+      document.getElementById('page-register').classList.remove('active');
+      if (currentUser && currentUser.role === 'admin') {
+        document.getElementById('nav-admin').style.display = 'inline-block';
+      }
+      goTo('home');
+      updateNotifBadge();
+      loadFirebaseData();
+    }
+
+    // =============================================================
+    //  🔐 AUTH
+    // =============================================================
+    function showRegister() {
+      document.getElementById('page-auth').classList.remove('active');
+      document.getElementById('page-register').classList.add('active');
+    }
+
+    function showLogin() {
+      document.getElementById('page-register').classList.remove('active');
+      document.getElementById('page-auth').classList.add('active');
+    }
+
+    function login() {
+      const u = document.getElementById('auth-user').value.trim();
+      const p = document.getElementById('auth-pass').value;
+      const msg = document.getElementById('auth-msg');
+
+      if (!u || !p) { msg.textContent = '❌ الرجاء ملء جميع الحقول'; return; }
+
+      db.ref('users/' + u).once('value').then((snapshot) => {
+        const user = snapshot.val();
+        if (!user) {
+          msg.textContent = '❌ اسم المستخدم غير موجود';
+          return;
+        }
+        if (user.password !== p) {
+          msg.textContent = '❌ كلمة المرور غير صحيحة';
+          return;
+        }
+        if (user.banned) {
+          msg.textContent = '🚫 هذا الحساب محظور';
+          return;
+        }
+        currentUser = user;
+        localStorage.setItem('wn_current_v2', JSON.stringify(currentUser));
+        initApp();
+      });
+    }
+
+    function register() {
+      const username = document.getElementById('reg-username').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const passwordConfirm = document.getElementById('reg-password-confirm').value;
+      const msg = document.getElementById('reg-msg');
+
+      if (!username || !password || !passwordConfirm) {
+        msg.textContent = '❌ الرجاء ملء جميع الحقول';
+        return;
+      }
+
+      if (password !== passwordConfirm) {
+        msg.textContent = '❌ كلمة المرور غير متطابقة';
+        return;
+      }
+
+      if (password.length < 6) {
+        msg.textContent = '❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+        return;
+      }
+
+      db.ref('users/' + username).once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+          msg.textContent = '❌ اسم المستخدم موجود مسبقاً';
+          return;
+        }
+
+        const newUser = {
+          username: username,
+          password: password,
+          ingame: username,
+          discord: '',
+          id: '',
+          avatar: '',
+          role: 'user',
+          rank: 'عضو',
+          created: Date.now(),
+          banned: false
+        };
+
+        db.ref('users/' + username).set(newUser);
+        msg.style.color = 'var(--accent)';
+        msg.textContent = '✅ تم إنشاء الحساب! سجل دخول الآن';
+        document.getElementById('reg-username').value = '';
+        document.getElementById('reg-password').value = '';
+        document.getElementById('reg-password-confirm').value = '';
+        setTimeout(() => showLogin(), 1500);
+      });
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('wn_current_v2');
+      location.reload();
+    }
+
+    // =============================================================
+    //  🏠 HOME
+    // =============================================================
+    function updateHomeStats() {
+      document.getElementById('stat-users').textContent = users.length;
+      document.getElementById('stat-apps').textContent = applications.length;
+      document.getElementById('stat-accepted').textContent = applications.filter(a => a.status === 'accepted').length;
+      document.getElementById('stat-rejected').textContent = applications.filter(a => a.status === 'rejected').length;
+    }
+
+    function loadAnnouncements() {
+      const container = document.getElementById('home-announcements');
+      if (!announcements || announcements.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-dim);">لا توجد إعلانات حالياً</p>';
+        return;
+      }
+      container.innerHTML = announcements.slice(-3).reverse().map(a => `
+          <div style="background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;margin-bottom:10px;">
+            <h4 style="color:var(--accent);">${escapeHtml(a.title)}</h4>
+            <p style="color:#ccc;font-size:14px;">${escapeHtml(a.content)}</p>
+            <p style="color:var(--text-dim);font-size:11px;margin-top:5px;">${new Date(a.time).toLocaleString('ar-SA')}</p>
+          </div>
+        `).join('');
+    }
+
+    // =============================================================
+    //  📝 APPLY
+    // =============================================================
+    function initApply() {
+      clearInterval(timerInterval);
+      const userApps = applications.filter(a => a.username === currentUser.username);
+      const lastApp = userApps.sort((a, b) => b.time - a.time)[0];
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      const form = document.getElementById('apply-form');
+      const blocked = document.getElementById('apply-blocked');
+
+      if (!settings.applicationsOpen) {
+        form.style.display = 'none';
+        blocked.style.display = 'block';
+        blocked.innerHTML = `
+            <div style="font-size:56px;margin-bottom:15px;">🔒</div>
+            <h3 style="color:var(--warn);margin-bottom:10px;font-size:20px;">التقديم مغلق حالياً</h3>
+            <p style="color:#ccc;">سيتم فتح التقديم قريباً</p>
+          `;
+        return;
+      }
+
+      if (lastApp && (now - lastApp.time) < oneDay) {
+        form.style.display = 'none';
+        blocked.style.display = 'block';
+        const remaining = oneDay - (now - lastApp.time);
+        updateApplyTimer(remaining);
+        timerInterval = setInterval(() => {
+          const r = oneDay - (Date.now() - lastApp.time);
+          if (r <= 0) { clearInterval(timerInterval);
+            initApply(); return; }
+          updateApplyTimer(r);
+        }, 1000);
+      } else {
+        form.style.display = 'block';
+        blocked.style.display = 'none';
+        startOpenTimer();
+      }
+    }
+
+    function updateApplyTimer(ms) {
+      const h = Math.floor(ms / 3600000).toString().padStart(2, '0');
+      const m = Math.floor((ms % 3600000) / 60000).toString().padStart(2, '0');
+      const s = Math.floor((ms % 60000) / 1000).toString().padStart(2, '0');
+      document.getElementById('apply-timer').textContent = `${h}:${m}:${s}`;
+    }
+
+    function startOpenTimer() {
+      let sec = 0;
+      document.getElementById('open-timer').textContent = '00:00:00';
+      timerInterval = setInterval(() => {
+        sec++;
+        const h = Math.floor(sec / 3600).toString().padStart(2, '0');
+        const m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
+        const s = (sec % 60).toString().padStart(2, '0');
+        document.getElementById('open-timer').textContent = `${h}:${m}:${s}`;
+      }, 1000);
+    }
+
+    function submitApply() {
+      const data = {
+        username: currentUser.username,
+        name: document.getElementById('q-name').value.trim(),
+        age: document.getElementById('q-age').value.trim(),
+        id: document.getElementById('q-id').value.trim(),
+        exp: document.getElementById('q-exp').value.trim(),
+        why: document.getElementById('q-why').value.trim(),
+        benefit: document.getElementById('q-benefit').value.trim(),
+        pg: document.getElementById('q-pg').value.trim(),
+        mg: document.getElementById('q-mg').value.trim(),
+        pd: document.getElementById('q-pd').value.trim(),
+        sk: document.getElementById('q-sk').value.trim(),
+        tk: document.getElementById('q-tk').value.trim(),
+        rk: document.getElementById('q-rk').value.trim(),
+        dos: document.getElementById('q-dos').value.trim(),
+        kos: document.getElementById('q-kos').value.trim(),
+        fl: document.getElementById('q-fl').value.trim(),
+        gov: document.getElementById('q-gov').value.trim(),
+        scenario: document.getElementById('q-scenario').value.trim(),
+        time: Date.now(),
+        status: 'pending',
+        id_app: 'APP-' + Date.now()
+      };
+
+      const msg = document.getElementById('apply-msg');
+
+      if (!data.name || !data.age || !data.id || !data.exp || !data.why || !data.benefit ||
+        !data.pg || !data.mg || !data.pd || !data.sk || !data.tk || !data.rk ||
+        !data.dos || !data.kos || !data.fl || !data.gov || !data.scenario) {
+        msg.style.color = 'var(--danger)';
+        msg.textContent = '❌ الرجاء ملء جميع الحقول';
+        return;
+      }
+
+      db.ref('applications/' + data.id_app).set(data);
+      clearInterval(timerInterval);
+
+      msg.style.color = 'var(--accent)';
+      msg.textContent = '✅ تم إرسال الطلب بنجاح!';
+
+      ['q-name', 'q-age', 'q-id', 'q-exp', 'q-why', 'q-benefit',
+        'q-pg', 'q-mg', 'q-pd', 'q-sk', 'q-tk', 'q-rk',
+        'q-dos', 'q-kos', 'q-fl', 'q-gov', 'q-scenario'
+      ].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+
+      setTimeout(() => goTo('home'), 2000);
+    }
+
+    // =============================================================
+    //  👤 PROFILE
+    // =============================================================
+    function renderProfile() {
+      if (!currentUser) return;
+      const u = currentUser;
+      document.getElementById('profile-avatar').src = u.avatar || 'https://via.placeholder.com/120/00ff88/000?text=W';
+      document.getElementById('profile-name').textContent = u.username;
+      document.getElementById('profile-ingame').textContent = u.ingame || '-';
+      document.getElementById('profile-discord').textContent = u.discord || '-';
+      document.getElementById('profile-id').textContent = u.id || '-';
+      document.getElementById('profile-created').textContent = new Date(u.created).toLocaleDateString('ar-SA');
+
+      const userApps = applications.filter(a => a.username === u.username);
+      document.getElementById('profile-apps-count').textContent = userApps.length;
+
+      const lastApp = userApps.sort((a, b) => b.time - a.time)[0];
+      const statusEl = document.getElementById('profile-status');
+      if (lastApp) {
+        const statusMap = { 'pending': '⏳ قيد المراجعة', 'accepted': '✅ مقبول', 'rejected': '❌ مرفوض' };
+        statusEl.textContent = statusMap[lastApp.status] || lastApp.status;
+        statusEl.style.color = lastApp.status === 'accepted' ? 'var(--accent)' : lastApp.status === 'rejected' ? 'var(--danger)' :
+          'var(--warn)';
+      } else {
+        statusEl.textContent = 'لا يوجد طلب';
+        statusEl.style.color = 'var(--text-dim)';
+      }
+    }
+
+    function editProfile() {
+      const u = currentUser;
+      const newAvatar = prompt('رابط الصورة الجديد:', u.avatar);
+      if (newAvatar !== null) {
+        u.avatar = newAvatar;
+        db.ref('users/' + u.username).update({ avatar: newAvatar });
+        localStorage.setItem('wn_current_v2', JSON.stringify(u));
+        renderProfile();
+      }
+    }
+
+    // =============================================================
+    //  🔔 NOTIFICATIONS
+    // =============================================================
+    function renderNotifications() {
+      if (!currentUser) return;
+      const list = document.getElementById('notif-list');
+      const myNotifs = notifications.filter(n => n.to === currentUser.username).sort((a, b) => b.time - a.time);
+
+      if (myNotifs.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">📭</div>
+              <p>لا توجد إشعارات حالياً</p>
+            </div>`;
+        return;
+      }
+
+      list.innerHTML = myNotifs.map(n => `
+          <div class="notif-item ${n.status}" style="border-right-color: ${n.status === 'accepted' ? 'var(--accent)' : n.status === 'rejected' ? 'var(--danger)' : 'var(--warn)'};">
+            <div>
+              <div style="font-weight:700;font-size:15px;margin-bottom:4px;">
+                ${n.status === 'accepted' ? '✅ تم قبول طلبك' : n.status === 'rejected' ? '❌ تم رفض طلبك' : '📢 ' + (n.title || 'إعلان')}
+              </div>
+              <div style="color:var(--text-dim);font-size:13px;">${n.content || 'رقم الطلب: ' + n.appId}</div>
+            </div>
+            <div style="color:var(--text-dim);font-size:12px;direction:ltr;">
+              ${new Date(n.time).toLocaleString('ar-SA')}
+            </div>
+          </div>
+        `).join('');
+
+      notifications.forEach(n => {
+        if (n.to === currentUser.username && !n.read) {
+          n.read = true;
+          db.ref('notifications').orderByChild('to').equalTo(currentUser.username).once('value').then((snapshot) => {
+            snapshot.forEach((child) => {
+              const data = child.val();
+              if (!data.read) {
+                db.ref('notifications/' + child.key).update({ read: true });
+              }
+            });
+          });
+        }
+      });
+      updateNotifBadge();
+    }
+
+    function updateNotifBadge() {
+      if (!currentUser) return;
+      const unread = notifications.filter(n => n.to === currentUser.username && !n.read).length;
+      const badge = document.getElementById('notif-badge');
+      if (unread > 0) { badge.style.display = 'inline';
+        badge.textContent = unread; } else { badge.style.display = 'none'; }
+    }
+
+    // =============================================================
+    //  🛡️ ADMIN
+    // =============================================================
+    function renderAdmin() {
+      document.getElementById('admin-users').textContent = users.length;
+      document.getElementById('admin-apps').textContent = applications.length;
+      document.getElementById('admin-accepted').textContent = applications.filter(a => a.status === 'accepted').length;
+      document.getElementById('admin-rejected').textContent = applications.filter(a => a.status === 'rejected').length;
+
+      adminTab('apps');
+      filterAdmin('all');
+
+      document.getElementById('sector-name').placeholder = settings.sectorName;
+      document.getElementById('discord-link').placeholder = settings.discordLink;
+      document.getElementById('accent-color').value = settings.accentColor;
+      document.getElementById('toggle-apps-btn').textContent = settings.applicationsOpen ? '🔒 إغلاق التقديم' : '🔓 فتح التقديم';
+    }
+
+    function adminTab(tab) {
+      document.getElementById('admin-apps-section').style.display = tab === 'apps' ? 'block' : 'none';
+      document.getElementById('admin-users-section').style.display = tab === 'users' ? 'block' : 'none';
+      document.getElementById('admin-announcements-section').style.display = tab === 'announcements' ? 'block' : 'none';
+      document.getElementById('admin-settings-section').style.display = tab === 'settings' ? 'block' : 'none';
+
+      if (tab === 'users') renderAdminUsers();
+      if (tab === 'announcements') renderAnnouncementsList();
+    }
+
+    function filterAdmin(f) {
+      adminFilter = f;
+      renderAdminApps();
+    }
+
+    function renderAdminApps() {
+      const list = document.getElementById('admin-list');
+      let apps = [...applications];
+      if (adminFilter !== 'all') apps = apps.filter(a => a.status === adminFilter);
+      apps.sort((a, b) => b.time - a.time);
+
+      if (apps.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">📭</div>
+              <p>لا توجد طلبات</p>
+            </div>`;
+        return;
+      }
+
+      list.innerHTML = apps.map(a => {
+        const statusText = a.status === 'pending' ? '⏳ قيد المراجعة' : a.status === 'accepted' ? '✅ مقبول' : '❌ مرفوض';
+        return `
+            <div class="admin-item ${a.status}">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:15px;">
+                <div style="flex:1;min-width:260px;">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+                    <span style="font-size:18px;font-weight:800;">👤 ${escapeHtml(a.name)}</span>
+                    <span style="padding:4px 12px;border-radius:6px;font-size:12px;font-weight:700;${a.status === 'pending' ? 'color:var(--warn);background:#332200;' : a.status === 'accepted' ? 'color:var(--accent);background:#003311;' : 'color:var(--danger);background:#330000;'}">${statusText}</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;margin-bottom:12px;">
+                    <span style="color:var(--text-dim);font-size:13px;">🎂 العمر: ${escapeHtml(a.age)}</span>
+                    <span style="color:var(--text-dim);font-size:13px;">🆔 ID: ${escapeHtml(a.id)}</span>
+                    <span style="color:var(--text-dim);font-size:13px;">👤 المستخدم: ${escapeHtml(a.username)}</span>
+                    <span style="color:var(--text-dim);font-size:13px;direction:ltr;">🕐 ${new Date(a.time).toLocaleString('ar-SA')}</span>
+                  </div>
+                  <div style="background:rgba(0,0,0,0.3);padding:14px;border-radius:10px;margin-bottom:8px;">
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">💼 الخبرة:</b> ${escapeHtml(a.exp)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">❓ لماذا:</b> ${escapeHtml(a.why)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">🚀 الفائدة:</b> ${escapeHtml(a.benefit)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 PG:</b> ${escapeHtml(a.pg)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 MG:</b> ${escapeHtml(a.mg)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 PD:</b> ${escapeHtml(a.pd)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 SK:</b> ${escapeHtml(a.sk)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 TK:</b> ${escapeHtml(a.tk)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 RK:</b> ${escapeHtml(a.rk)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 DOS:</b> ${escapeHtml(a.dos)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 KOS:</b> ${escapeHtml(a.kos)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 /fl:</b> ${escapeHtml(a.fl)}</p>
+                    <p style="margin:0 0 6px 0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">📜 /gov:</b> ${escapeHtml(a.gov)}</p>
+                    <p style="margin:0;color:#ccc;font-size:13px;line-height:1.7;"><b style="color:var(--accent);">⚡ السيناريو:</b> ${escapeHtml(a.scenario)}</p>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;min-width:130px;">
+                  ${a.status === 'pending' ? `
+                      <button class="btn-success" style="width:100%;" onclick="decide('${a.id_app}','accepted')">✅ قبول</button>
+                      <button class="btn-danger" style="width:100%;" onclick="decide('${a.id_app}','rejected')">❌ رفض</button>
+                    ` : ''}
+                  <button class="btn-outline btn-sm" style="width:100%;border-color:var(--danger);color:var(--danger);" onclick="deleteApp('${a.id_app}')">🗑️ حذف</button>
+                </div>
+              </div>
+            </div>
+          `;
+      }).join('');
+    }
+
+    function decide(appId, status) {
+      const app = applications.find(a => a.id_app === appId);
+      if (!app) return;
+
+      let reason = '';
+      if (status === 'rejected') {
+        reason = prompt('✏️ اكتب سبب الرفض:');
+        if (reason === null) return;
+      }
+
+      db.ref('applications/' + appId).update({
+        status: status,
+        reason: reason || ''
+      });
+
+      const notif = {
+        to: app.username,
+        status: status,
+        content: status === 'accepted' ? 'تم قبول طلبك بنجاح 🎉' : 'تم رفض طلبك: ' + (reason || 'لم يتم تحديد سبب'),
+        appId: appId,
+        time: Date.now(),
+        read: false,
+        title: status === 'accepted' ? '✅ قبول طلب' : '❌ رفض طلب'
+      };
+
+      db.ref('notifications').push(notif);
+    }
+
+    function deleteApp(appId) {
+      if (!confirm('⚠️ هل أنت متأكد من حذف هذا الطلب؟')) return;
+      db.ref('applications/' + appId).remove();
+    }
+
+    // =============================================================
+    //  👥 ADMIN USERS
+    // =============================================================
+    function renderAdminUsers() {
+      const list = document.getElementById('admin-users-list');
+      const search = document.getElementById('admin-search').value.toLowerCase();
+      let filtered = users.filter(u =>
+        u.username.toLowerCase().includes(search) ||
+        (u.id && u.id.includes(search))
+      );
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">👤</div>
+              <p>لا يوجد مستخدمين</p>
+            </div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(u => `
+          <div class="admin-item">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                  <span style="font-size:18px;font-weight:800;">👤 ${escapeHtml(u.username)}</span>
+                  <span style="color:var(--text-dim);font-size:13px;">${u.role === 'admin' ? '🛡️ أدمن' : '👤 عضو'}</span>
+                  <span style="color:var(--text-dim);font-size:13px;">🎮 ${escapeHtml(u.ingame || '-')}</span>
+                  <span style="color:var(--text-dim);font-size:13px;">🆔 ${escapeHtml(u.id || '-')}</span>
+                  ${u.banned ? '<span style="color:var(--danger);font-weight:700;">🚫 محظور</span>' : ''}
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                ${u.role !== 'admin' ? `
+                    <select class="input-field" style="width:auto;padding:6px 12px;font-size:12px;" onchange="changeRank('${u.username}', this.value)">
+                      <option value="">تعديل الرتبة</option>
+                      <option value="PG">PG</option>
+                      <option value="MG">MG</option>
+                      <option value="PD">PD</option>
+                      <option value="SK">SK</option>
+                      <option value="TK">TK</option>
+                      <option value="RK">RK</option>
+                      <option value="DOS">DOS</option>
+                      <option value="KOS">KOS</option>
+                    </select>
+                  ` : ''}
+                ${u.role !== 'admin' ? `
+                    <button class="btn-danger btn-sm" onclick="banUser('${u.username}')">${u.banned ? '🔓 فك الحظر' : '🚫 حظر'}</button>
+                    <button class="btn-danger btn-sm" onclick="deleteUser('${u.username}')">🗑️ حذف</button>
+                  ` : ''}
+              </div>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    function searchUsers() {
+      renderAdminUsers();
+    }
+
+    function changeRank(username, rank) {
+      if (!rank) return;
+      db.ref('users/' + username).update({ rank: rank });
+    }
+
+    function banUser(username) {
+      const user = users.find(u => u.username === username);
+      if (user) {
+        db.ref('users/' + username).update({ banned: !user.banned });
+      }
+    }
+
+    function deleteUser(username) {
+      if (!confirm(`⚠️ هل أنت متأكد من حذف المستخدم ${username}؟`)) return;
+      db.ref('users/' + username).remove();
+    }
+
+    // =============================================================
+    //  📢 ADMIN ANNOUNCEMENTS
+    // =============================================================
+    function sendAnnouncement() {
+      const title = document.getElementById('announcement-title').value.trim();
+      const content = document.getElementById('announcement-content').value.trim();
+      const msg = document.getElementById('announcement-msg');
+
+      if (!title || !content) {
+        msg.style.color = 'var(--danger)';
+        msg.textContent = '❌ الرجاء ملء جميع الحقول';
+        return;
+      }
+
+      const announcement = {
+        id: 'ANN-' + Date.now(),
+        title: title,
+        content: content,
+        time: Date.now(),
+        from: currentUser.username
+      };
+
+      db.ref('announcements/' + announcement.id).set(announcement);
+
+      users.forEach(u => {
+        if (u.username !== currentUser.username) {
+          db.ref('notifications').push({
+            to: u.username,
+            status: 'announcement',
+            title: '📢 ' + title,
+            content: content,
+            time: Date.now(),
+            read: false
+          });
+        }
+      });
+
+      msg.style.color = 'var(--accent)';
+      msg.textContent = '✅ تم إرسال الإعلان بنجاح!';
+      document.getElementById('announcement-title').value = '';
+      document.getElementById('announcement-content').value = '';
+    }
+
+    function renderAnnouncementsList() {
+      const list = document.getElementById('announcements-list');
+      if (!announcements || announcements.length === 0) {
+        list.innerHTML = '<p style="color:var(--text-dim);">لا توجد إعلانات</p>';
+        return;
+      }
+      list.innerHTML = announcements.slice().reverse().map(a => `
+          <div style="background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);padding:15px;border-radius:10px;">
+            <h4 style="color:var(--accent);">${escapeHtml(a.title)}</h4>
+            <p style="color:#ccc;font-size:14px;">${escapeHtml(a.content)}</p>
+            <p style="color:var(--text-dim);font-size:11px;margin-top:5px;">${new Date(a.time).toLocaleString('ar-SA')} - بواسطة ${escapeHtml(a.from)}</p>
+            <button class="btn-danger btn-sm" onclick="deleteAnnouncement('${a.id}')" style="margin-top:8px;">🗑️ حذف</button>
+          </div>
+        `).join('');
+    }
+
+    function deleteAnnouncement(id) {
+      if (!confirm('⚠️ هل أنت متأكد من حذف هذا الإعلان؟')) return;
+      db.ref('announcements/' + id).remove();
+    }
+
+    // =============================================================
+    //  ⚙️ ADMIN SETTINGS
+    // =============================================================
+    function toggleApplications() {
+      settings.applicationsOpen = !settings.applicationsOpen;
+      db.ref('settings').update({ applicationsOpen: settings.applicationsOpen });
+      document.getElementById('toggle-apps-btn').textContent = settings.applicationsOpen ? '🔒 إغلاق التقديم' : '🔓 فتح التقديم';
+      document.getElementById('settings-msg').textContent = '✅ تم تحديث الإعدادات';
+      document.getElementById('settings-msg').style.color = 'var(--accent)';
+    }
+
+    function changeSectorName() {
+      const name = document.getElementById('sector-name').value.trim();
+      if (!name) {
+        document.getElementById('settings-msg').textContent = '❌ الرجاء إدخال اسم القطاع';
+        document.getElementById('settings-msg').style.color = 'var(--danger)';
+        return;
+      }
+      db.ref('settings').update({ sectorName: name });
+      document.getElementById('settings-msg').textContent = '✅ تم تغيير اسم القطاع';
+      document.getElementById('settings-msg').style.color = 'var(--accent)';
+    }
+
+    function changeAccentColor() {
+      const color = document.getElementById('accent-color').value;
+      db.ref('settings').update({ accentColor: color });
+      document.getElementById('settings-msg').textContent = '✅ تم تغيير اللون';
+      document.getElementById('settings-msg').style.color = 'var(--accent)';
+    }
+
+    function changeDiscordLink() {
+      const link = document.getElementById('discord-link').value.trim();
+      if (!link) {
+        document.getElementById('settings-msg').textContent = '❌ الرجاء إدخال رابط صحيح';
+        document.getElementById('settings-msg').style.color = 'var(--danger)';
+        return;
+      }
+      db.ref('settings').update({ discordLink: link });
+      document.getElementById('settings-msg').textContent = '✅ تم تغيير رابط الديسكورد';
+      document.getElementById('settings-msg').style.color = 'var(--accent)';
+    }
+
+    // =============================================================
+    //  🛠️ UTILITIES
+    // =============================================================
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // =============================================================
+    //  🚀 INIT
+    // =============================================================
+    if (currentUser) {
+      initApp();
+    } else {
+      document.getElementById('navbar').style.display = 'none';
+      document.getElementById('footer').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
